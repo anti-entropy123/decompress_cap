@@ -2,3 +2,5 @@
 .gdbinit
 .vscode
 bindings.rs
+**/*.a
+**/*.o

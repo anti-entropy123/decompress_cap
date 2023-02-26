@@ -12,14 +12,16 @@ fn add_lib(lib_name: &str, lib_path: &str) {
     );
 }
 
-fn cheri_gen_bind() {
+fn cheri_gen_bind(lib_path: &str) {
+    let dir = PathBuf::from(lib_path);
+
     if !Command::new("clang")
         .args([
             "-nostdlib",
             "-c",
-            "cheri-compressed-cap/wrapper.c",
+            dir.join("wrapper.c").to_str().unwrap(),
             "-o",
-            "cheri-compressed-cap/cheri.o",
+            dir.join("cheri.o").to_str().unwrap(),
         ])
         .output()
         .expect("compile failed.")
@@ -32,8 +34,8 @@ fn cheri_gen_bind() {
     if !Command::new("ar")
         .args([
             "-r",
-            "cheri-compressed-cap/libcheri.a",
-            "cheri-compressed-cap/cheri.o",
+            dir.join("libcheri.a").to_str().unwrap(),
+            dir.join("cheri.o").to_str().unwrap(),
         ])
         .output()
         .expect("compile failed.")
@@ -55,7 +57,6 @@ fn cheri_gen_bind() {
 }
 
 fn main() {
-    // add_lib("say", "say_hello");
-    cheri_gen_bind();
-    add_lib("cheri", "cheri-compressed-cap");
+    cheri_gen_bind("binding");
+    add_lib("cheri", "binding");
 }
