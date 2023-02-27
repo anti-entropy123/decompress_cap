@@ -15,7 +15,7 @@ fn add_lib(lib_name: &str, lib_path: &str) {
 fn cheri_gen_bind(lib_path: &str) {
     let dir = PathBuf::from(lib_path);
 
-    if !Command::new("clang")
+    if !Command::new("cc")
         .args([
             "-nostdlib",
             "-c",
@@ -46,7 +46,7 @@ fn cheri_gen_bind(lib_path: &str) {
     }
 
     let bindings = bindgen::Builder::default()
-        .header("cheri-compressed-cap/cheri_compressed_cap.h")
+        .header(dir.join("wrapper.h").to_str().unwrap())
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
         .generate()
         .expect("Unable to generate bindings");
