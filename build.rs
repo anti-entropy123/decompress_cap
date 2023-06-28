@@ -8,7 +8,7 @@ fn add_lib(lib_name: &str, lib_path: &str) {
     println!("cargo:rustc-link-lib=static={}", library_name);
     println!(
         "cargo:rustc-link-search=native={}",
-        env::join_paths(&[library_dir]).unwrap().to_str().unwrap()
+        env::join_paths([library_dir]).unwrap().to_str().unwrap()
     );
 }
 

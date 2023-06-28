@@ -6,8 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# cheri-rust = { path = "cheri-rust" }
+bitflags = "2.3.3"
 
 [build-dependencies]
-dunce = "0.1.1"
-bindgen = "*"
+dunce = "1.0.4"
+bindgen = "0.66.0"

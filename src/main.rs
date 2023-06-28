@@ -1,16 +1,17 @@
 use std::{env, process};
 
-use decompress_cap::cc128_decompress_mem;
+use decompress_cap::{cc128_decompress_mem, HWPerms, UPerms};
 
 fn parse_input_cap() -> (u64, u64) {
-    let args: Vec<String> = env::args().collect();
-    if args.len() != 2 {
-        eprintln!("Usage: decompress_cap_128 CAP");
-        process::exit(1);
-    }
-
     // let input = String::from("0xffff0000000140060000000000000000");
-    let input = args[1].clone();
+    let input = {
+        let args: Vec<String> = env::args().collect();
+        if args.len() != 2 {
+            eprintln!("Usage: decompress_cap <YOUR_CAPABILITY>");
+            process::exit(1);
+        }
+        args[1].clone()
+    };
 
     let mut cap_val: String = match input.strip_prefix("0x") {
         Some(cap_val) => cap_val.to_owned(),
@@ -41,14 +42,19 @@ fn main() {
 
     let result = &mut cc128_decompress_mem(pesbt, cursor, false);
 
-    println!(
-        "Permissions: 0x{:x?}",
-        decompress_cap::cc128_get_perms(result)
-    );
-    println!(
-        "User Perms: 0x{:x?}",
-        decompress_cap::cc128_get_uperms(result)
-    );
+    let perm = decompress_cap::cc128_get_perms(result) as u32;
+    let perm_names: Vec<_> = HWPerms::from_bits_truncate(perm)
+        .iter_names()
+        .map(|x| x.0)
+        .collect();
+    println!("Permissions: 0x{:x?} ({})", perm, perm_names.join("|"));
+
+    let uperm = decompress_cap::cc128_get_uperms(result) as u32;
+    let uperm_names: Vec<_> = UPerms::from_bits_truncate(uperm)
+        .iter_names()
+        .map(|x| x.0)
+        .collect();
+    println!("User Perms: 0x{:x?} ({})", uperm, uperm_names.join("|"));
     println!("Base:   0x{:016x}", result.cr_base);
     println!("Offset: 0x{:016x}", result._cr_cursor - result.cr_base);
     println!("Cursor: 0x{:016x}", result._cr_cursor);
