@@ -78,7 +78,7 @@ bitflags! {
     pub struct UPerms: u32 {
         const CHERI_PERM_SW0 = 1;
         const CHERI_PERM_SW1 = 2;
-        const CHERI_PERM_SW2 = 3;
-        const CHERI_PERM_SW3 = 4;
+        const CHERI_PERM_SW2 = 4;
+        const CHERI_PERM_SW3 = 8;
     }
 }

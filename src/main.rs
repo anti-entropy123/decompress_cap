@@ -61,12 +61,5 @@ fn main() {
     println!("Length: 0x{:016x}", result._cr_top - result.cr_base as u128);
     println!("Top:    0x{:016x}", result._cr_top);
     println!("Sealed: {}", decompress_cap::cc128_is_cap_sealed(result));
-    println!(
-        "Valid decompress: {}",
-        if result.cr_bounds_valid == 1 {
-            "yes"
-        } else {
-            "no"
-        }
-    );
+    println!("Valid decompress: {}", result.cr_bounds_valid != 0);
 }
